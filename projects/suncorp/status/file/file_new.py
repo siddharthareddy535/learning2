@@ -33,7 +33,7 @@ def mcid_func(retainVars = retainVars):
     row['str2'] = ''
     row['str3'] = ''
     row['str4'] = ''
-    row['iostr5'] = ''
+    row['iostr5'] = ''smKMAFKLMQDA;LVMKLFMSKLBVKDSAMV
     row['str6'] = ''
     while retainvars['p_rtc'] != '1':
         callmodule('SAMCIDI', retainvars['pgnb'], retainvars['p_mod'], retainvars['p_gen'], retainvars['p_len'], retainvars['p_key'], retainvars['p_rtc'], row['str1'], row['str2'], row['str3'], row['iostr5'], row['str6'])
