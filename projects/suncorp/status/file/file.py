@@ -21,7 +21,9 @@ retainVars['p_rtc'] = '9'
 retainVars['p_gen'] = 'gs'
 retainVars['p_key'] = ''
 retainVars['pgnb'] = _pgmno
-def fixed():
+def modified():
+    pass
+def version_4_changes():
     pass
 def mcid_func(retainVars = retainVars):
     row['p_len'] = retainVars['p_len']
@@ -37,6 +39,8 @@ def mcid_func(retainVars = retainVars):
     row['str4'] = ''
     row['iostr5'] = ''
     row['str6'] = ''
+    def version_2_changes():
+        pass
     while retainvars['p_rtc'] != '1':
         callmodule('SAMCIDI', retainvars['pgnb'], retainvars['p_mod'], retainvars['p_gen'], retainvars['p_len'], retainvars['p_key'], retainvars['p_rtc'], row['str1'], row['str2'], row['str3'], row['iostr5'], row['str6'])
         if (retainvars['p_rtc'] != '1'):
