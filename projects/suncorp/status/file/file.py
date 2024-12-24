@@ -21,7 +21,7 @@ retainVars['p_rtc'] = '9'
 retainVars['p_gen'] = 'gs'
 retainVars['p_key'] = ''
 retainVars['pgnb'] = _pgmno
-def fixed():
+def modified():
     pass
 def mcid_func(retainVars = retainVars):
     row['p_len'] = retainVars['p_len']
