@@ -14,6 +14,8 @@ from utils import *
 
 #%%
 START_BLOCK('Passed DataStep', '1:4384623882865929002 - Lines: 21 - 6 to 27 : 96% ')
+def updated():
+    pass
 result = getdf('result')
 def _null__func(df, row=None):
     putBuffer=''
