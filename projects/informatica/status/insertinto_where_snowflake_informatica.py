@@ -1,4 +1,9 @@
-p_date = 20210731
+#sasFilePath: automation_sample/insertinto_where.sas
+#conversionTime: 01/03/2025 02:49:23
+#linesInFile: 80 #linesOfCode: 63 #linesOfPython: 74
+#complexity: 1 #processedBlocks: 3 #passedBlocks: 3
+#failedBlocks: 0 #totalErrors: 0
+
 
 selectCols = [
   (tbl("STG_DODV_DS_POSITIONFLATTENED"), col("CODE")),
@@ -26,10 +31,9 @@ selectCols = [
 
 
 expression = [
-  f"""{p_date} AS p_date"""
+  "{p_date} AS p_date"
 ]
 
-where = [f"""STARTDATE1 <= '{p_date}' and ENDDATE1 >= '{p_date}' and EFFECTIVESTATUS = 'A' and trim(CODE) != 'ExpatManager'"""]
 
 
 informatica_insertinto(
@@ -37,7 +41,7 @@ informatica_insertinto(
     target = tbl("saswork.fct_vacantpos_005"),
     columns = selectCols,
 expression = expression,
-where = where,
 truncate = False,
 distinct = False,
+
 )

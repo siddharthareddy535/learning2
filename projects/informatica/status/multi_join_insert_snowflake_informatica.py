@@ -1,5 +1,5 @@
-#sasFilePath: test.sas
-#conversionTime: 12/23/2024 12:06:35
+#sasFilePath: automation_sample/multi_join_insert.sas
+#conversionTime: 01/03/2025 02:48:38
 #linesInFile: 67 #linesOfCode: 42 #linesOfPython: 31
 #complexity: 1 #processedBlocks: 3 #passedBlocks: 3
 #failedBlocks: 0 #totalErrors: 0
@@ -26,7 +26,7 @@ expression = [
 ]
 
 informatica_insertinto(
-    source = (tbl("DWH.EDW_CML_DIM_PRODUCT"), alias("EDW_CML_DIM_PRODUCT")),
+    source = (tbl("SASWORK.EDW_CML_DIM_PRODUCT"), alias("EDW_CML_DIM_PRODUCT")),
     truncate = True,
     expression = expression,
     expressionname = tbl("EDW_CML_DIM_PRODUCT_JOIN2")
@@ -38,7 +38,7 @@ informatica_insertinto(
 informatica_simple_join(
       left = (tbl("ODS_TRANS_INMARKETSALES_JOIN1"), alias("ODS_TRANS_INMARKETSALES")),
       right = (tbl("EDW_CML_DIM_PRODUCT_JOIN2"), alias("EDW_CML_DIM_PRODUCT")),
-      target = tbl("saswork_idwh_fct_inmarketsalesactuals2_CART1"),
+      target = tbl("saswork.idwh_fct_inmarketsalesactuals2_CART1"),
       truncate = True,
       onCondition ="""
         ODS_TRANS_INMARKETSALES.PACKNAME_ID_JOIN1=EDW_CML_DIM_PRODUCT.PRODUCTPACK_NM_JOIN2 AND
@@ -50,9 +50,9 @@ informatica_simple_join(
 
 
 informatica_simple_join(
-      left = (tbl("saswork_idwh_fct_inmarketsalesactuals2_CART1"), alias("saswork_idwh_fct_inmarketsalesactuals2_CART1")),
-      right = (tbl("DWH.EDW_CML_DIM_PANEL"), alias("EDW_CML_DIM_PANEL")),
-      target = tbl("saswork_idwh_fct_inmarketsalesactuals2_CART2"),
+      left = (tbl("saswork.idwh_fct_inmarketsalesactuals2_CART1"), alias("saswork.idwh_fct_inmarketsalesactuals2_CART1")),
+      right = (tbl("ODS_TRANS_INMARKETSALES"), alias("ODS_TRANS_INMARKETSALES")),
+      target = tbl("saswork.idwh_fct_inmarketsalesactuals2_CART2"),
       truncate = True,
       onCondition ="""
         ODS_TRANS_INMARKETSALES.PANELCODE_ID=EDW_CML_DIM_PANEL.PANEL_CD
@@ -63,9 +63,9 @@ informatica_simple_join(
 
 
 informatica_simple_join(
-      left = (tbl("saswork_idwh_fct_inmarketsalesactuals2_CART2"), alias("saswork_idwh_fct_inmarketsalesactuals2_CART2")),
-      right = (tbl("DWH.EDW_CML_DIM_MARKET"), alias("EDW_CML_DIM_MARKET")),
-      target = tbl("saswork_idwh_fct_inmarketsalesactuals2_CART3"),
+      left = (tbl("saswork.idwh_fct_inmarketsalesactuals2_CART2"), alias("saswork.idwh_fct_inmarketsalesactuals2_CART2")),
+      right = (tbl("EDW_CML_DIM_MARKET"), alias("EDW_CML_DIM_MARKET")),
+      target = tbl("saswork.idwh_fct_inmarketsalesactuals2_CART3"),
       truncate = True,
       onCondition ="""
         ODS_TRANS_INMARKETSALES.MARKETCODE_ID=EDW_CML_DIM_MARKET.MARKETCODE_ID AND
@@ -77,8 +77,8 @@ informatica_simple_join(
 
 
 informatica_simple_join(
-      left = (tbl("saswork_idwh_fct_inmarketsalesactuals2_CART3"), alias("saswork_idwh_fct_inmarketsalesactuals2_CART3")),
-      right = (tbl("DWH.EDW_CML_DIM_SPECIALTY"), alias("EDW_CML_DIM_SPECIALTY")),
+      left = (tbl("saswork.idwh_fct_inmarketsalesactuals2_CART3"), alias("saswork.idwh_fct_inmarketsalesactuals2_CART3")),
+      right = (tbl("EDW_CML_DIM_SPECIALTY"), alias("EDW_CML_DIM_SPECIALTY")),
       target = tbl("saswork.idwh_fct_inmarketsalesactuals2_CART4"),
       truncate = True,
       onCondition ="""
@@ -91,29 +91,23 @@ informatica_simple_join(
 
 expression = [
   """CASE
-                WHEN saswork_idwh_fct_inmarketsalesactuals2_CART4.MARKETCODE_ID IS NULL THEN - 1
-                WHEN saswork_idwh_fct_inmarketsalesactuals2_CART4.MARKETCODE_ID IS NOT NULL
-                AND saswork_idwh_fct_inmarketsalesactuals2_CART4.MARKET_SK IS NULL THEN - 2
-                ELSE saswork_idwh_fct_inmarketsalesactuals2_CART4.MARKET_SK
+                WHEN ODS_TRANS_INMARKETSALES.MARKETCODE_ID IS NULL THEN - 1
+                WHEN ODS_TRANS_INMARKETSALES.MARKETCODE_ID IS NOT NULL
+                AND EDW_CML_DIM_MARKET.MARKET_SK IS NULL THEN - 2
+                ELSE EDW_CML_DIM_MARKET.MARKET_SK
             END AS market_sk""",
-"""COALESCE(saswork_idwh_fct_inmarketsalesactuals2_CART4.SPECIALTY_SK, -2) AS specialty_sk""",
-"""COALESCE(saswork_idwh_fct_inmarketsalesactuals2_CART4.PRODUCT_SK, -2) AS product_sk""",
-"""COALESCE(saswork_idwh_fct_inmarketsalesactuals2_CART4.PANEL_SK, -2) AS panel_sk"""
+"COALESCE(EDW_CML_DIM_SPECIALTY.SPECIALTY_SK, -2) AS specialty_sk",
+"COALESCE(EDW_CML_DIM_PRODUCT.PRODUCT_SK, -2) AS product_sk",
+"COALESCE(EDW_CML_DIM_PANEL.PANEL_SK, -2) AS panel_sk"
 ]
 
 
-selectCols = [
-(tbl("saswork_idwh_fct_inmarketsalesactuals2_CART4"), col("MARKET_SK")),
-(tbl("saswork_idwh_fct_inmarketsalesactuals2_CART4"), col("SPECIALTY_SK")),
-(tbl("saswork_idwh_fct_inmarketsalesactuals2_CART4"), col("PRODUCT_SK")),
-(tbl("saswork_idwh_fct_inmarketsalesactuals2_CART4"), col("PANEL_SK"))
-]
 
 informatica_insertinto(
-    source = (tbl("saswork_idwh_fct_inmarketsalesactuals2_CART4"), alias("saswork_idwh_fct_inmarketsalesactuals2_CART4")),
+    source = (tbl("saswork.ods_trans_inmarketsales"), alias("ODS_TRANS_INMARKETSALES")),
     target = tbl("saswork.idwh_fct_inmarketsalesactuals2"),
     expression = expression,
-    truncate = True,
-    distinct = False,
-    columns = selectCols
+truncate = False,
+distinct = False,
+
 )
