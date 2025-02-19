@@ -15,6 +15,8 @@ from utils import *
 #%%
 START_BLOCK('Passed DataStep', '1:4662118624581971203 - Lines: 22 - 6 to 28 : 52% ')
 ctmspmr = getdf('ctmspmr')
+def updated_file_2():
+    pass
 ctmspmr['a'] = 1
 mapDFs['ctmspmr'] = ctmspmr
 def grd_func(df, row=None):
