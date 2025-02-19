@@ -1,39 +1,19 @@
-#sasFilePath: automation_sample/simple_groupby.sas
-#conversionTime: 01/02/2025 09:11:23
-#linesInFile: 37 #linesOfCode: 21 #linesOfPython: 14
-#complexity: 1 #processedBlocks: 3 #passedBlocks: 3
-#failedBlocks: 0 #totalErrors: 0
+truncate = False
 
-
-#informatica_delete_transformation(
-#      table = "TBD",
-#      deleteTable = True
-#    )
-
-groupbyCols = [
-  "ENTITY_GUID"
-]
-
+groupbyCols = ["ENTITY_GUID"]
 
 aggCols = [
-  ("MIN(ENTITY_TIME_CREATED) AS entity_time_created", "STRING"),
-("COUNT(*) AS cnt", "STRING")
+    ("min(ENTITY_TIME_CREATED) as ENTITY_TIME_CREATED", "datetime"), 
+    ("count(*) as cnt", "integer")
 ]
 
+normalCols = [("ENTITY_GUID", "string")]
 
-normalCols = [
-  ("ENTITY_GUID", "STRING")
-]
-
-
-
-informatica_insertinto(
-    source = (tbl("dwh.dwh_darth_eln_entitycreate_dt_f"), alias("DWH_DARTH_ELN_ENTITYCREATE_DT_F")),
-    target = tbl("saswork.eln_min_createdt"),
-    groupby = groupbyCols,
-aggcols = aggCols,
-normalcols = normalCols,
-truncate = False,
-distinct = False,
-
+informatica_simple_groupby(
+  source=tbl("DWH.DWH_DARTH_ELN_ENTITYCREATE_DT_F"),
+  target=tbl("SASWORK.ELN_MIN_CREATEDT"),
+  groupby=groupbyCols,
+  aggcols=aggCols,
+  normalcols=normalCols,
+  truncate=truncate
 )
